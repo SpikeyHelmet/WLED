@@ -3,12 +3,12 @@
 /*
    Main sketch, global variable declarations
    @title WLED project sketch
-   @version 0.11.0
+   @version 0.11.1
    @author Christian Schwinne
  */
 
 // version code in format yymmddb (b = daily build)
-#define VERSION 2011230
+#define VERSION 2101130
 
 //uncomment this if you have a "my_config.h" file you'd like to use
 //#define WLED_USE_MY_CONFIG
@@ -22,10 +22,11 @@
 // You are required to disable over-the-air updates:
 //#define WLED_DISABLE_OTA         // saves 14kb
 
-// You need to choose some of these features to disable:
+// You can choose some of these features to disable:
 //#define WLED_DISABLE_ALEXA       // saves 11kb
 //#define WLED_DISABLE_BLYNK       // saves 6kb
 //#define WLED_DISABLE_CRONIXIE    // saves 3kb
+//WLED_DISABLE_FX_HIGH_FLASH_USE (need to enable in PIO config or FX.h, saves 18kb)
 //#define WLED_DISABLE_HUESYNC     // saves 4kb
 //#define WLED_DISABLE_INFRARED    // there is no pin left for this on ESP8266-01, saves 12kb
 #ifndef WLED_DISABLE_MQTT
@@ -129,7 +130,7 @@
   Comment out this error message to build regardless.
 #endif
 
-#if IR_PIN < 0
+#if IRPIN < 0
   #ifndef WLED_DISABLE_INFRARED
     #define WLED_DISABLE_INFRARED
   #endif
@@ -173,7 +174,7 @@
 #endif
 
 // Global Variable definitions
-WLED_GLOBAL char versionString[] _INIT("0.11.0");
+WLED_GLOBAL char versionString[] _INIT("0.11.1");
 #define WLED_CODENAME "Mirai"
 
 // AP and OTA default passwords (for maximum security change them!)
@@ -203,6 +204,9 @@ WLED_GLOBAL IPAddress staticIP      _INIT_N(((  0,   0,  0,  0))); // static IP 
 WLED_GLOBAL IPAddress staticGateway _INIT_N(((  0,   0,  0,  0))); // gateway (router) IP
 WLED_GLOBAL IPAddress staticSubnet  _INIT_N(((255, 255, 255, 0))); // most common subnet in home networks
 WLED_GLOBAL bool noWifiSleep _INIT(false);                         // disabling modem sleep modes will increase heat output and power usage, but may help with connection issues
+#ifdef WLED_USE_ETHERNET
+WLED_GLOBAL int ethernetType _INIT(WLED_ETH_ESP32_POE);            // ethernet board type
+#endif
 
 // LED CONFIG
 WLED_GLOBAL uint16_t ledCount _INIT(30);          // overcurrent prevented by ABL
@@ -249,6 +253,8 @@ WLED_GLOBAL bool alexaEnabled _INIT(false);                       // enable devi
 WLED_GLOBAL char alexaInvocationName[33] _INIT("Light");          // speech control name of device. Choose something voice-to-text can understand
 
 WLED_GLOBAL char blynkApiKey[36] _INIT("");                       // Auth token for Blynk server. If empty, no connection will be made
+WLED_GLOBAL char blynkHost[33] _INIT("blynk-cloud.com");          // Default Blynk host
+WLED_GLOBAL uint16_t blynkPort _INIT(80);                         // Default Blynk port
 
 WLED_GLOBAL uint16_t realtimeTimeoutMs _INIT(2500);               // ms timeout of realtime mode before returning to normal mode
 WLED_GLOBAL int arlsOffset _INIT(0);                              // realtime LED offset
@@ -339,11 +345,7 @@ WLED_GLOBAL bool interfacesInited _INIT(false);
 WLED_GLOBAL bool wasConnected _INIT(false);
 
 // color
-WLED_GLOBAL byte colOld[]    _INIT_N(({ 0, 0, 0, 0 }));        // color before transition
-WLED_GLOBAL byte colT[]      _INIT_N(({ 0, 0, 0, 0 }));          // color that is currently displayed on the LEDs
 WLED_GLOBAL byte colIT[]     _INIT_N(({ 0, 0, 0, 0 }));         // color that was last sent to LEDs
-WLED_GLOBAL byte colSecT[]   _INIT_N(({ 0, 0, 0, 0 }));
-WLED_GLOBAL byte colSecOld[] _INIT_N(({ 0, 0, 0, 0 }));
 WLED_GLOBAL byte colSecIT[]  _INIT_N(({ 0, 0, 0, 0 }));
 
 WLED_GLOBAL byte lastRandomIndex _INIT(0);        // used to save last random color so the new one is not the same

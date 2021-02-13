@@ -21,6 +21,10 @@
 #define USERMOD_ID_FIXNETSERVICES 4            //Usermod "usermod_Fix_unreachable_netservices.h"
 #define USERMOD_ID_PIRSWITCH      5            //Usermod "usermod_PIR_sensor_switch.h"
 #define USERMOD_ID_IMU            6            //Usermod "usermod_mpu6050_imu.h"
+#define USERMOD_ID_FOUR_LINE_DISP 7            //Usermod "usermod_v2_four_line_display.h 
+#define USERMOD_ID_ROTARY_ENC_UI  8            //Usermod "usermod_v2_rotary_encoder_ui.h"
+#define USERMOD_ID_AUTO_SAVE      9            //Usermod "usermod_v2_auto_save.h"
+#define USERMOD_ID_DHT           10            //Usermod "usermod_dht.h"
 
 //Access point behavior
 #define AP_BEHAVIOR_BOOT_NO_CONN  0            //Open AP when no connection after boot
@@ -71,6 +75,7 @@
 #define DMX_MODE_EFFECT           3            //trigger standalone effects of WLED (11 channels)
 #define DMX_MODE_MULTIPLE_RGB     4            //every LED is addressed with its own RGB (ledCount * 3 channels)
 #define DMX_MODE_MULTIPLE_DRGB    5            //every LED is addressed with its own RGB and share a master dimmer (ledCount * 3 + 1 channels)
+#define DMX_MODE_MULTIPLE_RGBW    6            //every LED is addressed with its own RGBW (ledCount * 4 channels)
 
 //Light capability byte (unused) 0bRRCCTTTT
 //bits 0/1/2/3: specifies a type of LED driver. A single "driver" may have different chip models but must have the same protocol/behavior
@@ -104,6 +109,15 @@
 #define TYPE_TM1814              54
 
 
+//Color orders
+#define COL_ORDER_GRB             0           //GRB(w),defaut
+#define COL_ORDER_RGB             1           //common for WS2811
+#define COL_ORDER_BRG             2
+#define COL_ORDER_RBG             3
+#define COL_ORDER_BGR             4
+#define COL_ORDER_GBR             5
+
+
 //Button type
 #define BTN_TYPE_NONE             0
 #define BTN_TYPE_RESERVED         1
@@ -112,6 +126,10 @@
 #define BTN_TYPE_SWITCH           4 //not implemented
 #define BTN_TYPE_SWITCH_ACT_HIGH  5 //not implemented
 
+//Ethernet board types
+#define WLED_ETH_NONE             0
+#define WLED_ETH_WT32_ETH01       1
+#define WLED_ETH_ESP32_POE        2
 
 //Hue error codes
 #define HUE_ERROR_INACTIVE        0

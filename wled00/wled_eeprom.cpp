@@ -36,6 +36,20 @@
 //21-> 0.10.1p
 //22-> 2009260
 
+/*
+ * Erase all (pre 0.11) configuration data on factory reset
+ */
+void clearEEPROM()
+{
+  EEPROM.begin(EEPSIZE);
+  for (int i = 0; i < EEPSIZE; i++)
+  {
+    EEPROM.write(i, 0);
+  }
+  EEPROM.end();
+}
+
+
 void readStringFromEEPROM(uint16_t pos, char* str, uint16_t len)
 {
   for (int i = 0; i < len; ++i)
@@ -224,7 +238,7 @@ void loadSettingsFromEEPROM()
 
   if (lastEEPROMversion > 9)
   {
-    strip.colorOrder = EEPROM.read(383);
+    strip.setColorOrder(EEPROM.read(383));
     irEnabled = EEPROM.read(385);
     strip.ablMilliampsMax = EEPROM.read(387) + ((EEPROM.read(388) << 8) & 0xFF00);
   } else if (lastEEPROMversion > 1) //ABL is off by default when updating from version older than 0.8.2
